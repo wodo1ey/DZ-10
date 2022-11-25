@@ -1,0 +1,83 @@
+#include "pt4.h"
+#include "string"
+#include "fstream"
+#include "Algorithm"
+#include <iomanip>
+using namespace std;
+
+void sort_shaker(int* m, int n) {
+    int left = 1; 
+    int right = n - 1; 
+    int j, t, k = n - 1;
+    do {
+        for (j = left; j <= right; j++)
+            if (m[j - 1] < m[j]) {
+                t = m[j - 1]; m[j - 1] = m[j]; m[j] = t;
+                k = j; 
+            }
+        right = k - 1;
+        for (j = right; j >= left; j--) 
+            if (m[j - 1] < m[j]) {
+                t = m[j - 1]; m[j - 1] = m[j]; m[j] = t;
+                k = j; 
+            }
+        left = k + 1;
+    } while (left <= right);
+}
+
+void Solve()
+{
+    Task("Five14");
+    string fn1, fn2;
+    pt >> fn1 >> fn2;
+    ifstream file1(fn1);
+    ofstream file2(fn2);
+    string str, sup;
+    string x;
+    string* mas;
+    int size = 100;
+    int j = 0;
+    int n = 0;
+    int* masBall;
+    masBall = new int[size];
+    mas = new string[size];
+    while (getline(file1, str)) {
+        sup += str[str.size() - 1];
+        masBall[j] = stoi(sup);
+        sup.clear();
+        for (int i = 0; i < str.size(); i++) {
+            sup += str[i];
+        }
+        mas[j] = sup;
+        sup.clear();
+        j++;
+    }
+    size = j;
+    sort_shaker(masBall, size);
+    sort(mas, mas + size);
+    string help, help2;
+    help += mas[0];
+    for (int i = 0; i < size; i++) {
+        help += mas[i];
+        sup += help[help.size() - 1];
+        if (stoi(sup) == masBall[0]) {
+            help2.clear();
+            help2 += help;
+            help2.erase(help2.size() - 1);
+            help2.erase(help2.size() - 1);
+            file2 << left << setw(15) << help2 << right << setw(3) << masBall[0] << endl;
+            for (int k = i; k < size; ++k)
+            {
+                mas[k] = mas[k + 1];
+            }
+            for (int k = 0; k < size; ++k)
+            {
+                masBall[k] = masBall[k + 1];
+            }
+            i = -1;
+            --size;
+        }
+        sup.clear();
+        help.clear();
+    }
+}
