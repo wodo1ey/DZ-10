@@ -1,0 +1,74 @@
+// Дан массив целых чисел из n элементов. Отсортировать однозначые числа в массиве в порядке возрастания,
+// а все остальные - в порядке убывания. Использовать сортировку простыми вставками.
+
+#include <iostream>
+#include <iomanip>
+#include <time.h>
+
+using namespace std;
+
+void simpleSort(int* m, int n) {
+    int j, r;
+    for (int i = 1; i < n; i++) {
+        if (m[i] % 10 == m[i]) {
+            r = m[i];
+            j = i - 1;
+            while (j >= 0 && m[j] % 10 == m[j] && m[j] > r) {
+                m[j + 1] = m[j];
+                j--;
+            }
+        }
+        else {
+            r = m[i];
+            j = i - 1;
+            while (j >= 0 && m[j] % 10 != m[j] && m[j] < r) {
+                m[j + 1] = m[j];
+                j--;
+            }
+        }
+        m[j + 1] = r;
+    }
+}
+
+int main()
+{
+    int* m;
+    int n;
+    cin >> n;
+    m = new int[n];
+    srand(time(0));
+    for (int i = 0; i <n; i++) m[i] = 0 + rand() % 25;
+    for (int i = 0; i < n; i++) cout << m[i] << ' ';
+    cout << endl;
+    int size1, size2, s1 = 0, s2 = 0;
+    size1 = n, size2 = n;
+    int* m1;
+    m1 = new int[size1];
+    int* m2;
+    m2 = new int[size2];
+    for (int i = 0; i < n; i++) {
+        if (m[i] % 10 == m[i]) {
+            m1[s1] = m[i];
+            s1++;
+        }
+        else {
+            m2[s2] = m[i];
+            s2++;
+        }
+    }
+    size1 = s1, size2 = s2;
+    simpleSort(m1, size1);
+    simpleSort(m2, size2);
+    s1 = 0, s2 = 0;
+    for (int i = 0; i < n; i++) {
+        if (m[i] % 10 == m[i]) {
+            m[i] = m1[s1];
+            s1++;
+        }
+        else {
+            m[i] = m2[s2];
+            s2++;
+        }
+    }
+    for (int i = 0; i < n; i++) cout << m[i] << ' ';
+}
